@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work CHecking</title>
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-darker: #0a0a0a;
+            --gold-primary: #FFD700;
+            --gold-secondary: #FFC000;
+            --gold-tertiary: #FFA500;
+            --text-primary: #E0E0E0;
+            --text-secondary: #A0A0A0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255, 215, 0, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 215, 0, 0.03) 0%, transparent 50%);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+        }
+        
+        h1 {
+            color: var(--gold-primary);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        .progress-container {
+            background-color: var(--bg-darker);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: rgba(255, 215, 0, 0.1);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold-secondary), var(--gold-primary));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gold-primary);
+            font-size: 0.9rem;
+        }
+        
+        .todo-list {
+            list-style: none;
+        }
+        
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.75rem;
+            background-color: var(--bg-darker);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            border-left: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .todo-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--gold-primary);
+        }
+        
+        .todo-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .todo-item:hover::before {
+            opacity: 1;
+        }
+        
+        .todo-checkbox {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--gold-secondary);
+            border-radius: 4px;
+            margin-right: 1rem;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .todo-checkbox:checked {
+            background-color: var(--gold-primary);
+            border-color: var(--gold-primary);
+        }
+        
+        .todo-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            color: var(--bg-darker);
+            font-size: 14px;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .todo-text {
+            flex-grow: 1;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+        }
+        
+        .completed .todo-text {
+            color: var(--text-secondary);
+            text-decoration: line-through;
+        }
+        
+        .priority {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 1rem;
+            background-color: var(--gold-tertiary);
+            opacity: 0.7;
+        }
+        
+        .v-imp {
+            position: relative;
+        }
+        
+        .v-imp::after {
+            content: '★';
+            color: var(--gold-primary);
+            margin-left: 0.5rem;
+            font-size: 0.8em;
+            vertical-align: super;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .todo-item {
+                padding: 0.8rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Remastering Images</h1>
+            <p class="subtitle">Try to accomplish tasks asap!</p>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>Progress</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <ul class="todo-list" id="todoList">
+            <!-- Todo items will be added here dynamically -->
+        </ul>
+    </div>
+
+    <script>
+        // DSA problems list with importance markers
+        const dsaProblems = [
+            {text: "aboutus", important: false},
+            {text: "Campus Life", important: false},
+            {text: "Company icons", important: false},
+            {text: "departments", important: false},
+            {text: "Events", important: false},
+            {text: "Hostel", important: false},
+            {text: "Sports", important: false},
+            {text: "Web devs", important: false},
+            {text: "Placement", important: false}
+        ];
+
+        // Initialize the todo list
+        document.addEventListener('DOMContentLoaded', function() {
+            const todoList = document.getElementById('todoList');
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            
+            // Load saved state from localStorage
+            const savedState = localStorage.getItem('dsaTodoState');
+            let completedProblems = [];
+            let totalProblems = dsaProblems.length;
+            
+            if (savedState) {
+                completedProblems = JSON.parse(savedState);
+                updateProgress(completedProblems.length, totalProblems);
+            }
+            
+            // Create todo items
+            dsaProblems.forEach((problem, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'todo-item';
+                if (problem.important) {
+                    listItem.classList.add('v-imp');
+                }
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'todo-checkbox';
+                checkbox.id = `problem-${index}`;
+                checkbox.checked = completedProblems.includes(index);
+                
+                const label = document.createElement('label');
+                label.className = 'todo-text';
+                if (checkbox.checked) {
+                    label.classList.add('completed');
+                }
+                label.textContent = problem.text;
+                label.setAttribute('for', `problem-${index}`);
+                
+                const priorityDot = document.createElement('div');
+                priorityDot.className = 'priority';
+                priorityDot.style.display = problem.important ? 'block' : 'none';
+                
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        label.classList.add('completed');
+                        if (!completedProblems.includes(index)) {
+                            completedProblems.push(index);
+                        }
+                    } else {
+                        label.classList.remove('completed');
+                        completedProblems = completedProblems.filter(item => item !== index);
+                    }
+                    localStorage.setItem('dsaTodoState', JSON.stringify(completedProblems));
+                    updateProgress(completedProblems.length, totalProblems);
+                });
+                
+                listItem.appendChild(checkbox);
+                listItem.appendChild(label);
+                listItem.appendChild(priorityDot);
+                todoList.appendChild(listItem);
+            });
+            
+            function updateProgress(completed, total) {
+                const percentage = Math.round((completed / total) * 100);
+                progressFill.style.width = `${percentage}%`;
+                progressPercent.textContent = `${percentage}%`;
+                
+                // Change gradient based on progress
+                if (percentage < 30) {
+                    progressFill.style.background = 'linear-gradient(90deg, #FF5555, #FF0000)';
+                } else if (percentage < 70) {
+                    progressFill.style.background = 'linear-gradient(90deg, #FFAA00, #FF7700)';
+                } else {
+                    progressFill.style.background = 'linear-gradient(90deg, var(--gold-secondary), var(--gold-primary))';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
